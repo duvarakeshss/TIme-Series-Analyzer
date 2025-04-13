@@ -1,0 +1,15 @@
+pandas
+numpy
+scikit-learn
+fastapi
+uvicorn
+python-multipart
+statsmodels
+prophet
+matplotlib
+seaborn
+plotly
+joblib
+pydantic
+tqdm
+scipy
