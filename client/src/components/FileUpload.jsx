@@ -123,10 +123,6 @@ function FileUpload({ onAnalysisComplete }) {
             <p>Upload a CSV file with the following requirements:</p>
             <ul className="list-disc pl-5 mt-1 space-y-1">
               <li>Must include a timestamp/date column and a numeric value column</li>
-              <li>All values should be numeric (not text or mixed types)</li>
-              <li>At least 10 data points are required</li>
-              <li>Recommended format: rows of timestamp,value pairs</li>
-              <li><strong>For large files:</strong> Consider using a sample of data (100-500 rows) for faster processing</li>
             </ul>
           </div>
         </div>
