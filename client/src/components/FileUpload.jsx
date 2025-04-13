@@ -34,7 +34,7 @@ function FileUpload({ onAnalysisComplete }) {
       const commonParams = '?horizon=20&simplify=true&detect_anomalies=true'
       
       // First get the analysis data without plot
-      const analysisResult = await axios.post(`http://localhost:8000/analyze${commonParams}`, formData, {
+      const analysisResult = await axios.post(`https://datagenie-533a.onrender.com/analyze${commonParams}`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data'
         },
