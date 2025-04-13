@@ -530,54 +530,55 @@ useEffect(() => {
       
       {/* Summary Stats */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-        <div className="bg-gray-700 rounded-lg p-4 shadow-md">
-          <div className="text-gray-300 text-sm mb-1">Forecastability Score</div>
+        <div className="bg-gray-700 rounded-lg p-4 shadow-md hover:shadow-lg transition-all duration-300 transform hover:scale-105 hover:bg-gray-600 cursor-pointer">
+          <div className="text-gray-300 text-sm mb-1 font-medium">Forecastability Score</div>
           <div className="text-2xl font-bold text-blue-400">{results.forecastability_score}/10</div>
           <div className="text-xs text-gray-400 mt-1">Higher is better</div>
         </div>
-        <div className="bg-gray-700 rounded-lg p-4 shadow-md">
-          <div className="text-gray-300 text-sm mb-1">Mean Abs % Error</div>
+        <div className="bg-gray-700 rounded-lg p-4 shadow-md hover:shadow-lg transition-all duration-300 transform hover:scale-105 hover:bg-gray-600 cursor-pointer">
+          <div className="text-gray-300 text-sm mb-1 font-medium">Mean Abs % Error</div>
           <div className="text-2xl font-bold text-blue-400">{results.mape}</div>
           <div className="text-xs text-gray-400 mt-1">Lower is better</div>
         </div>
-        <div className="bg-gray-700 rounded-lg p-4 shadow-md">
-          <div className="text-gray-300 text-sm mb-1">Data Points</div>
+        <div className="bg-gray-700 rounded-lg p-4 shadow-md hover:shadow-lg transition-all duration-300 transform hover:scale-105 hover:bg-gray-600 cursor-pointer">
+          <div className="text-gray-300 text-sm mb-1 font-medium">Data Points</div>
           <div className="text-2xl font-bold text-blue-400">{results.results?.length || 0}</div>
           <div className="text-xs text-gray-400 mt-1">Number of data points</div>
         </div>
-        <div className="bg-gray-700 rounded-lg p-4 shadow-md">
-          <div className="text-gray-300 text-sm mb-1">Anomalies Detected</div>
+        <div className="bg-gray-700 rounded-lg p-4 shadow-md hover:shadow-lg transition-all duration-300 transform hover:scale-105 hover:bg-gray-600 cursor-pointer">
+          <div className="text-gray-300 text-sm mb-1 font-medium">Anomalies Detected</div>
           <div className="text-2xl font-bold text-red-400">{anomalyCount}</div>
           <div className="text-xs text-gray-400 mt-1">Unusual data points</div>
         </div>
       </div>
       
       {/* Plot Container */}
-      <div className="mb-6 bg-white rounded-lg shadow-lg p-4">
-        <div className="w-full h-[500px]" ref={plotContainerRef}>
+      <div className="mb-6 bg-gray-800 rounded-lg shadow-lg p-6 border-2 border-gray-700 hover:border-blue-500 transition-colors duration-300">
+        <h3 className="text-lg font-medium text-white mb-4 border-b border-gray-700 pb-2">Data Visualization</h3>
+        <div className="w-full h-[500px] relative rounded-lg overflow-hidden" ref={plotContainerRef}>
           {plotLoading && (
-            <div className="flex items-center justify-center h-full w-full bg-gray-100 text-gray-500 rounded-lg">
+            <div className="absolute inset-0 flex items-center justify-center bg-gray-900/75 backdrop-blur-sm text-gray-300 rounded-lg z-10">
               <div className="text-center">
-                <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-blue-500 border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite] mb-2"></div>
-                <p>Loading chart...</p>
+                <div className="inline-block h-12 w-12 animate-spin rounded-full border-4 border-solid border-blue-500 border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite] mb-3"></div>
+                <p className="text-lg">Loading chart...</p>
               </div>
             </div>
           )}
           
           {plotError && !plotLoading && (
-            <div className="flex items-center justify-center h-full w-full bg-gray-100 text-gray-500 rounded-lg">
-              <div className="text-center max-w-md p-4">
-                <svg className="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <div className="absolute inset-0 flex items-center justify-center bg-gray-900/75 backdrop-blur-sm text-gray-300 rounded-lg z-10">
+              <div className="text-center max-w-md p-6 bg-gray-800 rounded-lg shadow-lg border border-red-500/50">
+                <svg className="mx-auto h-16 w-16 text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
                 </svg>
-                <h3 className="mt-2 text-sm font-medium text-gray-900">Chart Error</h3>
-                <p className="mt-1 text-sm text-gray-500">
+                <h3 className="mt-4 text-lg font-medium text-white">Chart Error</h3>
+                <p className="mt-2 text-sm text-gray-400">
                   {plotError}
                 </p>
-                <div className="mt-3 text-xs text-gray-500">
+                <div className="mt-4">
                   <button 
                     onClick={handleRetryClick}
-                    className="py-2 px-4 bg-blue-500 text-white rounded hover:bg-blue-600"
+                    className="py-2 px-6 bg-blue-600 text-white rounded-lg hover:bg-blue-500 transition-colors duration-300 focus:ring-2 focus:ring-blue-400 focus:outline-none"
                   >
                     Retry Loading Chart
                   </button>
@@ -592,28 +593,33 @@ useEffect(() => {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Future Forecast Section */}
         {results.forecast && results.forecast.length > 0 && (
-          <div className="bg-gray-700 rounded-lg p-4 shadow-md">
-            <h3 className="text-lg font-medium text-white mb-3">Future Forecast ({results.forecast.length} periods)</h3>
-            <div className="overflow-x-auto">
+          <div className="bg-gray-800 rounded-lg p-6 shadow-lg hover:shadow-xl transition-all duration-300 border-2 border-gray-700 hover:border-blue-500">
+            <h3 className="text-lg font-medium text-white mb-4 border-b border-gray-700 pb-2 flex items-center">
+              <svg className="w-5 h-5 mr-2 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+              </svg>
+              Future Forecast <span className="ml-2 text-sm font-normal text-gray-400">({results.forecast.length} periods)</span>
+            </h3>
+            <div className="overflow-x-auto rounded-lg">
               <table className="min-w-full text-sm">
                 <thead>
-                  <tr className="border-b border-gray-600">
-                    <th className="text-left py-2 px-3 text-gray-300">Timestamp</th>
-                    <th className="text-right py-2 px-3 text-gray-300">Forecasted Value</th>
+                  <tr className="bg-gray-700">
+                    <th className="text-left py-3 px-4 text-gray-300 font-medium rounded-tl-lg">Timestamp</th>
+                    <th className="text-right py-3 px-4 text-gray-300 font-medium rounded-tr-lg">Forecasted Value</th>
                   </tr>
                 </thead>
                 <tbody>
                   {results.forecast.slice(0, 10).map((item, index) => (
-                    <tr key={index} className={`border-b border-gray-600 ${index % 2 === 0 ? 'bg-gray-800/30' : ''}`}>
-                      <td className="py-2 px-3 text-gray-300">{item.timestamp}</td>
-                      <td className="text-right py-2 px-3 text-blue-400">
+                    <tr key={index} className={`border-t border-gray-700 hover:bg-gray-700/50 transition-colors duration-200`}>
+                      <td className="py-3 px-4 text-gray-300">{item.timestamp}</td>
+                      <td className="text-right py-3 px-4 text-blue-400 font-medium">
                         {typeof item.value === 'number' ? item.value.toFixed(2) : item.value}
                       </td>
                     </tr>
                   ))}
                   {results.forecast.length > 10 && (
-                    <tr>
-                      <td colSpan={2} className="py-2 px-3 text-gray-400 text-center">
+                    <tr className="border-t border-gray-700 bg-gray-800/80">
+                      <td colSpan={2} className="py-3 px-4 text-gray-400 text-center font-medium">
                         {results.forecast.length - 10} more periods forecasted...
                       </td>
                     </tr>
@@ -625,36 +631,39 @@ useEffect(() => {
         )}
       
         {/* Anomalies Section */}
-        <div className="bg-gray-700 rounded-lg p-4 shadow-md">
-          <h3 className="text-lg font-medium text-white mb-3">
-            Detected Anomalies {anomalyCount > 0 ? `(${anomalyCount})` : '(None)'}
+        <div className="bg-gray-800 rounded-lg p-6 shadow-lg hover:shadow-xl transition-all duration-300 border-2 border-gray-700 hover:border-red-500">
+          <h3 className="text-lg font-medium text-white mb-4 border-b border-gray-700 pb-2 flex items-center">
+            <svg className="w-5 h-5 mr-2 text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+            </svg>
+            Detected Anomalies <span className="ml-2 text-sm font-normal text-gray-400">{anomalyCount > 0 ? `(${anomalyCount})` : '(None)'}</span>
           </h3>
           
           {anomalyCount > 0 ? (
-            <div className="overflow-x-auto">
+            <div className="overflow-x-auto rounded-lg">
               <table className="min-w-full text-sm">
                 <thead>
-                  <tr className="border-b border-gray-600">
-                    <th className="text-left py-2 px-3 text-gray-300">Timestamp</th>
-                    <th className="text-right py-2 px-3 text-gray-300">Actual Value</th>
-                    <th className="text-right py-2 px-3 text-gray-300">Expected Value</th>
+                  <tr className="bg-gray-700">
+                    <th className="text-left py-3 px-4 text-gray-300 font-medium rounded-tl-lg">Timestamp</th>
+                    <th className="text-right py-3 px-4 text-gray-300 font-medium">Actual Value</th>
+                    <th className="text-right py-3 px-4 text-gray-300 font-medium rounded-tr-lg">Expected Value</th>
                   </tr>
                 </thead>
                 <tbody>
                   {anomalies.slice(0, 10).map((item, index) => (
-                    <tr key={index} className={`border-b border-gray-600 ${index % 2 === 0 ? 'bg-gray-800/30' : ''}`}>
-                      <td className="py-2 px-3 text-gray-300">{item.timestamp}</td>
-                      <td className="text-right py-2 px-3 text-red-400">
+                    <tr key={index} className={`border-t border-gray-700 hover:bg-gray-700/50 transition-colors duration-200`}>
+                      <td className="py-3 px-4 text-gray-300">{item.timestamp}</td>
+                      <td className="text-right py-3 px-4 text-red-400 font-medium">
                         {typeof item.point_value === 'number' ? item.point_value.toFixed(2) : item.point_value}
                       </td>
-                      <td className="text-right py-2 px-3 text-blue-400">
+                      <td className="text-right py-3 px-4 text-blue-400 font-medium">
                         {typeof item.predicted === 'number' ? item.predicted.toFixed(2) : item.predicted}
                       </td>
                     </tr>
                   ))}
                   {anomalies.length > 10 && (
-                    <tr>
-                      <td colSpan={3} className="py-2 px-3 text-gray-400 text-center">
+                    <tr className="border-t border-gray-700 bg-gray-800/80">
+                      <td colSpan={3} className="py-3 px-4 text-gray-400 text-center font-medium">
                         {anomalies.length - 10} more anomalies detected...
                       </td>
                     </tr>
@@ -663,26 +672,49 @@ useEffect(() => {
               </table>
             </div>
           ) : (
-            <div className="text-gray-300 text-center py-6">
-              No anomalies detected in the data
+            <div className="flex flex-col items-center justify-center py-10 text-gray-400 bg-gray-700/30 rounded-lg">
+              <svg className="w-12 h-12 mb-3 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              <p className="text-lg">No anomalies detected in the data</p>
+              <p className="text-sm mt-1">Your time series appears to be stable</p>
             </div>
           )}
         </div>
       </div>
       
       {/* Performance Metrics */}
-      <div className="mt-6 bg-gray-700 rounded-lg p-4 shadow-md">
-        <h3 className="text-lg font-medium text-white mb-3">Technical Performance</h3>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div>
-            <div className="text-gray-300 mb-1">Number of batch fits</div>
-            <div className="text-xl font-semibold text-blue-400">{results.number_of_batch_fits}</div>
+      <div className="mt-6 bg-gray-800 rounded-lg p-6 shadow-lg hover:shadow-xl transition-all duration-300 border-2 border-gray-700 hover:border-green-500">
+        <h3 className="text-lg font-medium text-white mb-4 border-b border-gray-700 pb-2 flex items-center">
+          <svg className="w-5 h-5 mr-2 text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+          </svg>
+          Technical Performance
+        </h3>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="bg-gray-700/50 p-4 rounded-lg hover:bg-gray-700 transition-all duration-300">
+            <div className="text-gray-400 mb-1 font-medium">Number of batch fits</div>
+            <div className="text-2xl font-semibold text-blue-400">{results.number_of_batch_fits}</div>
+            <div className="text-xs text-gray-500 mt-1">Model training iterations</div>
           </div>
-          <div>
-            <div className="text-gray-300 mb-1">Average time per fit</div>
-            <div className="text-xl font-semibold text-blue-400">{results.avg_time_taken_per_fit_in_seconds} seconds</div>
+          <div className="bg-gray-700/50 p-4 rounded-lg hover:bg-gray-700 transition-all duration-300">
+            <div className="text-gray-400 mb-1 font-medium">Average time per fit</div>
+            <div className="text-2xl font-semibold text-blue-400">{results.avg_time_taken_per_fit_in_seconds} seconds</div>
+            <div className="text-xs text-gray-500 mt-1">Processing efficiency</div>
           </div>
         </div>
+
+        {/* Additional Metrics Section */}
+        {results.metrics && (
+          <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            {Object.entries(results.metrics).map(([key, value], index) => (
+              <div key={index} className="bg-gray-700/50 p-3 rounded-lg hover:bg-gray-700 transition-colors duration-300">
+                <div className="text-sm text-gray-400 font-medium truncate">{key.replace(/_/g, ' ')}</div>
+                <div className="text-lg font-medium text-blue-400 mt-1">{typeof value === 'number' ? value.toFixed(4) : value}</div>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );
