@@ -25,7 +25,6 @@ logger = logging.getLogger(__name__)
 # Add the parent directory to the Python path
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
-# Import classifier components
 
 # Create FastAPI app
 app = FastAPI(
@@ -124,6 +123,7 @@ async def root():
 
 
 def generate_plot(time_series, forecast_data=None, anomalies=None, past_forecast=None, plot_type="matplotlib"):
+    
     """
     Generate a plot of time series data with optional forecasts and anomalies
     
@@ -137,6 +137,7 @@ def generate_plot(time_series, forecast_data=None, anomalies=None, past_forecast
     Returns:
         encoded_image: Base64 encoded image or plotly JSON
     """
+    
     try:
         if plot_type == "plotly":
             fig = go.Figure()

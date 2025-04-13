@@ -23,15 +23,9 @@ from classifiers.classifier import TimeSeriesClassifier
 from classifiers.FeatureExtractor import FeatureExtractor
 
 def load_time_series_data(data_dir):
-    """
-    Load time series data from the specified directory
     
-    Args:
-        data_dir (str): Path to the data directory
-        
-    Returns:
-        dict: Dictionary of time series data with their labels
-    """
+    # Load time series data from the specified directory
+
     time_series_data = {}
     
     frequency_labels = {
@@ -91,15 +85,9 @@ def load_time_series_data(data_dir):
     return time_series_data
 
 def process_csv_file(file_path, csv_file, label, time_series_data):
-    """
-    Process a CSV file and add it to the time series data dictionary
     
-    Args:
-        file_path (str): Path to the CSV file
-        csv_file (str): Name of the CSV file
-        label (str): Label for the time series
-        time_series_data (dict): Dictionary to store the time series data
-    """
+    # Process a CSV file and add it to the time series data dictionary
+    
     try:
         df = pd.read_csv(file_path, sep=None, engine='python')  # Try to automatically detect delimiter
         logger.info(f"\nProcessing {csv_file}:")
@@ -142,7 +130,7 @@ def process_csv_file(file_path, csv_file, label, time_series_data):
         logger.debug(f"Using columns: time={time_col}, value={value_col}")
         
         try:
-            # Check if the data has a combined format (like '2022-08-10 00:00  514.90')
+            # Check if the time column contains combined time and value
             if df[time_col].dtype == object and df[time_col].str.contains('\\s{2,}').any():
                 # Split the combined column into time and value
                 logger.info(f"Detected combined time and value in column {time_col}")
@@ -176,7 +164,7 @@ def process_csv_file(file_path, csv_file, label, time_series_data):
             logger.warning(f"Could not parse datetime in {csv_file}: {str(e)}. Trying alternative approach...")
             
             try:
-                # Try to extract time and value columns manually if the file is space-delimited
+                # extract time and value columns manually if the file is space-delimited
                 with open(file_path, 'r') as f:
                     lines = f.readlines()
                 
@@ -187,7 +175,7 @@ def process_csv_file(file_path, csv_file, label, time_series_data):
                     if line.strip() and not line.startswith('#'):
                         parts = line.strip().split()
                         if len(parts) >= 2:
-                            # Try to parse time (could be in first two parts) and value
+                            # parse time (could be in first two parts) and value
                             try:
                                 time_str = ' '.join(parts[0:2]) if len(parts) > 2 else parts[0]
                                 time = pd.to_datetime(time_str)
@@ -231,15 +219,9 @@ def process_csv_file(file_path, csv_file, label, time_series_data):
         logger.error(f"Error loading {csv_file}: {str(e)}")
 
 def analyze_features(time_series_data):
-    """
-    Analyze feature distributions across different categories
     
-    Args:
-        time_series_data (dict): Dictionary of time series data
-        
-    Returns:
-        pd.DataFrame: DataFrame of extracted features for all time series
-    """
+    # Analyze feature distributions across categories and return DataFrame of extracted features
+    
     feature_extractor = FeatureExtractor()
     all_features = []
     
@@ -250,16 +232,10 @@ def analyze_features(time_series_data):
             series = data['series']
             label = data['label']
             
-            if series.nunique() <= 1:
-                logger.warning(f"Series {name} has constant values. Skipping...")
-                continue
-                
-            if len(series) < 10:
-                logger.warning(f"Series {name} has too few data points ({len(series)}). Skipping...")
+            if series.nunique() <= 1 or len(series) < 10:
                 continue
             
             preprocessed_series = feature_extractor.preprocess_data(series)
-            
             features = feature_extractor.extract_features(preprocessed_series)
             feature_names = feature_extractor.feature_names
             
@@ -274,7 +250,6 @@ def analyze_features(time_series_data):
             continue
     
     if not all_features:
-        logger.error("No valid features extracted from any time series")
         return pd.DataFrame()
         
     features_df = pd.DataFrame(all_features)
@@ -282,9 +257,7 @@ def analyze_features(time_series_data):
     if not features_df.empty:
         logger.info("\nFeature Statistics by Category:")
         for label in features_df['label'].unique():
-            logger.info(f"\n{label.upper()} Time Series:")
             category_df = features_df[features_df['label'] == label]
-            
             numeric_cols = category_df.select_dtypes(include=[np.number]).columns
             stats = category_df[numeric_cols].describe().T
             
@@ -295,6 +268,7 @@ def analyze_features(time_series_data):
     return features_df
 
 def train_and_evaluate_classifier(time_series_data, optimize=True):
+    
     """
     Train and evaluate a time series classifier
     
@@ -305,6 +279,7 @@ def train_and_evaluate_classifier(time_series_data, optimize=True):
     Returns:
         TimeSeriesClassifier: Trained classifier
     """
+    
     time_series_list = []
     labels = []
     
@@ -371,15 +346,9 @@ def train_and_evaluate_classifier(time_series_data, optimize=True):
         return None
 
 def visualize_results(features_df, classifier, time_series, class_names):
-    """
-    Create visualizations of the classification results
     
-    Args:
-        features_df (pd.DataFrame): DataFrame of extracted features
-        classifier (TimeSeriesClassifier): Trained classifier
-        time_series (pd.Series): Time series data for forecasting
-        class_names (list): List of class names for the confusion matrix
-    """
+    # visualizations of the classification results
+    
     if classifier is None:
         logger.error("Cannot create visualizations: No trained classifier provided")
         return
@@ -555,7 +524,6 @@ def main():
             forecast = classifier.forecast(time_series, horizon=60)
             classifier.plot_forecast(time_series, forecast, title='Time Series Forecast (60 Days)')
         
-        # Use only the features from trained labels for other visualizations
         trained_features_df = features_df[features_df['label'].isin(trained_labels)]
         
         class_names = list(trained_labels)
