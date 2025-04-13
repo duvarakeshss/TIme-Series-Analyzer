@@ -47,7 +47,7 @@ function FileUpload({ onAnalysisComplete }) {
       })
       
       // Now get a separate plot with consistent parameters
-      const plotResult = await axios.post(`http://localhost:8000/plot${commonParams}&plot_type=plotly`, formData, {
+      const plotResult = await axios.post(`https://datagenie-533a.onrender.com/plot${commonParams}&plot_type=plotly`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data'
         },
